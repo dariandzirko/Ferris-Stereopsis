@@ -6,4 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.9" # make sure this is the latest version
+bevy = "0.9"                                                                      # make sure this is the latest version
+realsense_wrapper = { git = "https://github.com/dariandzirko/realsense_wrapper" }

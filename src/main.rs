@@ -1,11 +1,17 @@
 use bevy::{prelude::*, winit::WinitSettings};
 
+mod realsense_bevy;
+
+#[derive(Component)]
+pub struct FeedImage(pub bool);
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .insert_resource(WinitSettings::desktop_app())
         .add_startup_system(setup)
         .add_system(button_system)
+        .add_system(realsense_bevy::image_read_display_system)
         .run();
 }
 
@@ -158,8 +164,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             ..default()
         })
+        .insert(FeedImage(true))
         .with_children(|parent| {
-            // bevy logo (image)
             parent.spawn(ImageBundle {
                 style: Style {
                     size: Size::new(Val::Auto, Val::Auto),
