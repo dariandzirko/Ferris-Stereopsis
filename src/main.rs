@@ -10,8 +10,9 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .insert_resource(WinitSettings::desktop_app())
         .add_startup_system(setup)
+        .add_startup_system(realsense_bevy::realsense_start_system)
         .add_system(button_system)
-        .add_system(realsense_bevy::image_read_display_system)
+        .add_system(realsense_bevy::update_display_system)
         .run();
 }
 
