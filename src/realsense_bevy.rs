@@ -1,18 +1,18 @@
-use std::process::Child;
-
+use crate::FeedImage;
 use bevy::prelude::*;
 use realsense_wrapper::*;
-
-use crate::FeedImage;
+use std::sync::{Arc, Mutex};
 
 const WIDTH: usize = 640;
 const HEIGHT: usize = 480;
 const FPS: u32 = 30;
 const STREAM_INDEX: u32 = 0;
 
+// Make this buffer a buffer of ImageData?
+// need to call pull_frame().get_curr_frame().to_image()
 #[derive(Resource)]
 pub struct FrameBufferResource {
-    pub buffer: FrameBuffer,
+    pub buffer: Arc<Mutex<FrameBuffer>>,
 }
 
 pub struct RealsensePlugin;
