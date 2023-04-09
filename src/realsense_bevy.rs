@@ -34,8 +34,8 @@ pub struct RealsensePlugin;
 
 impl Plugin for RealsensePlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(update_display_system)
-            .add_system(update_frame_buffer);
+        app.add_system(update_frame_buffer)
+            .add_system(update_display_system);
     }
 }
 
@@ -84,7 +84,7 @@ pub fn update_display_system(
         true,
     ));
     image.texture = images.get_handle(&handle);
-    images.clear();
+    //images.clear();
 }
 
 pub fn update_frame_buffer(

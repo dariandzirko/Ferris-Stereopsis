@@ -1,5 +1,8 @@
 use bevy::{prelude::*, winit::WinitSettings};
-use realsense_bevy::{FrameBufferResource, RealsensePlugin, RealsenseResource};
+use realsense_bevy::{
+    update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
+    RealsenseResource,
+};
 
 mod realsense_bevy;
 
@@ -10,13 +13,13 @@ fn main() {
     App::new()
         .insert_resource(FrameBufferResource::new())
         .insert_resource(RealsenseResource::new())
-        .add_plugins(DefaultPlugins)
-        .add_plugin(RealsensePlugin)
         .insert_resource(WinitSettings::desktop_app())
+        .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
         .add_startup_system(realsense_bevy::realsense_start_system)
         .add_system(button_system)
-        .add_system(realsense_bevy::update_display_system)
+        .add_system(update_frame_buffer)
+        .add_system(update_display_system)
         .run();
 }
 
@@ -59,7 +62,10 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             style: Style {
                 size: Size::new(Val::Px(150.0), Val::Px(65.0)),
                 //center button
-                margin: UiRect::all(Val::Auto),
+                margin: UiRect {
+                    left: Val::Percent(75.0),
+                    ..default()
+                },
                 //horizontally center child text
                 justify_content: JustifyContent::Center,
                 //vertically center child text
@@ -92,7 +98,10 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             style: Style {
                 size: Size::new(Val::Px(150.0), Val::Px(65.0)),
                 //center button
-                margin: UiRect::all(Val::Auto),
+                margin: UiRect {
+                    left: Val::Percent(75.0),
+                    ..default()
+                },
                 //horizontally center child text
                 justify_content: JustifyContent::Center,
                 //vertically center child text
@@ -125,7 +134,10 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             style: Style {
                 size: Size::new(Val::Px(150.0), Val::Px(65.0)),
                 //center button
-                margin: UiRect::all(Val::Auto),
+                margin: UiRect {
+                    left: Val::Percent(75.0),
+                    ..default()
+                },
                 //horizontally center child text
                 justify_content: JustifyContent::Center,
                 //vertically center child text
