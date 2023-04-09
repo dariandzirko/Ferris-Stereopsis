@@ -1,34 +1,45 @@
 use crate::FeedImage;
 use bevy::prelude::*;
 use realsense_wrapper::*;
-use std::sync::{Arc, Mutex};
-
-const WIDTH: usize = 640;
-const HEIGHT: usize = 480;
-const FPS: u32 = 30;
-const STREAM_INDEX: u32 = 0;
 
 // Make this buffer a buffer of ImageData?
 // need to call pull_frame().get_curr_frame().to_image()
 #[derive(Resource)]
 pub struct FrameBufferResource {
-    pub buffer: Arc<Mutex<FrameBuffer>>,
+    pub buffer: FrameBuffer,
+}
+
+impl FrameBufferResource {
+    pub fn new() -> Self {
+        FrameBufferResource {
+            buffer: FrameBuffer::new(),
+        }
+    }
+}
+
+#[derive(Resource)]
+pub struct RealsenseResource {
+    pub realsense: RealsenseInstance,
+}
+
+impl RealsenseResource {
+    pub fn new() -> Self {
+        RealsenseResource {
+            realsense: RealsenseInstance::new(),
+        }
+    }
 }
 
 pub struct RealsensePlugin;
 
 impl Plugin for RealsensePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(FrameBufferResource::new())
-            .add_startup_system(realsense_start_system)
+        app.add_system(update_display_system)
+            .add_system(update_frame_buffer);
     }
 }
 
-pub fn realsense_start_system(frame_buffer: ResMut<FrameBufferResource>) {
-    let mut realsense = RealsenseInstance::new();
-
-    let mut frame_buffer = FrameBuffer::new();
-
+pub fn realsense_start_system(realsense: ResMut<RealsenseResource>) {
     let stream_index = 0;
     let width = 640;
     let height = 480;
@@ -37,26 +48,26 @@ pub fn realsense_start_system(frame_buffer: ResMut<FrameBufferResource>) {
     let format = rs2_format_RS2_FORMAT_RGB8;
 
     unsafe {
+        let mut error = std::ptr::null_mut::<rs2_error>();
+
         rs2_config_enable_stream(
-            realsense.config,
+            realsense.realsense.config,
             stream,
             stream_index,
             width,
             height,
             format,
             fps,
-            &mut realsense.error,
+            &mut error,
         );
 
         let pipeline_profile = rs2_pipeline_start_with_config(
-            realsense.pipeline,
-            realsense.config,
-            &mut realsense.error,
+            realsense.realsense.pipeline,
+            realsense.realsense.config,
+            &mut error,
         );
-        check_error(realsense.error);
+        check_error(error);
     }
-
-    frame_buffer = frame_buffer;
 }
 
 pub fn update_display_system(
@@ -72,6 +83,13 @@ pub fn update_display_system(
         frame_buffer.buffer.get_curr_frame().to_image(),
         true,
     ));
-    image.0 = images.get_handle(&handle);
+    image.texture = images.get_handle(&handle);
     images.clear();
+}
+
+pub fn update_frame_buffer(
+    mut frame_buffer: ResMut<FrameBufferResource>,
+    mut realsense: ResMut<RealsenseResource>,
+) {
+    frame_buffer.buffer.pull_frame(&mut realsense.realsense);
 }

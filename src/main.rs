@@ -1,4 +1,5 @@
 use bevy::{prelude::*, winit::WinitSettings};
+use realsense_bevy::{FrameBufferResource, RealsensePlugin, RealsenseResource};
 
 mod realsense_bevy;
 
@@ -7,7 +8,10 @@ pub struct FeedImage(pub bool);
 
 fn main() {
     App::new()
+        .insert_resource(FrameBufferResource::new())
+        .insert_resource(RealsenseResource::new())
         .add_plugins(DefaultPlugins)
+        .add_plugin(RealsensePlugin)
         .insert_resource(WinitSettings::desktop_app())
         .add_startup_system(setup)
         .add_startup_system(realsense_bevy::realsense_start_system)
