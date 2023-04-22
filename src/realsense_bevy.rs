@@ -39,7 +39,7 @@ impl Plugin for RealsensePlugin {
     }
 }
 
-pub fn realsense_start_system(realsense: ResMut<RealsenseResource>) {
+pub fn realsense_start_system(mut realsense: ResMut<RealsenseResource>) {
     let stream_index = 0;
     let width = 640;
     let height = 480;
@@ -47,27 +47,9 @@ pub fn realsense_start_system(realsense: ResMut<RealsenseResource>) {
     let stream = rs2_stream_RS2_STREAM_COLOR;
     let format = rs2_format_RS2_FORMAT_RGB8;
 
-    unsafe {
-        let mut error = std::ptr::null_mut::<rs2_error>();
-
-        rs2_config_enable_stream(
-            realsense.realsense.config,
-            stream,
-            stream_index,
-            width,
-            height,
-            format,
-            fps,
-            &mut error,
-        );
-
-        let pipeline_profile = rs2_pipeline_start_with_config(
-            realsense.realsense.pipeline,
-            realsense.realsense.config,
-            &mut error,
-        );
-        check_error(error);
-    }
+    realsense
+        .realsense
+        .stream_frames(stream_index, width, height, fps, stream, format);
 }
 
 pub fn update_display_system(
@@ -79,12 +61,16 @@ pub fn update_display_system(
     let (_flag, children) = entity_query.iter().next().unwrap();
     let child = children.iter().next().unwrap();
     let mut image = image_query.get_mut(*child).unwrap();
-    let handle = images.add(Image::from_dynamic(
-        frame_buffer.buffer.get_curr_frame().to_image(),
-        true,
-    ));
-    image.texture = images.get_handle(&handle);
-    //images.clear();
+
+    let mut data = ImageData::default();
+    if let Some(frame) = frame_buffer.buffer.get_curr_frame() {
+        data = frame;
+    }
+
+    if let Some(image_data) = data.to_image() {
+        let handle = images.add(Image::from_dynamic(image_data, true));
+        image.texture = images.get_handle(&handle);
+    }
 }
 
 pub fn update_frame_buffer(
