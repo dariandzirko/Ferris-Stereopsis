@@ -56,7 +56,7 @@ pub fn update_display_system(
     entity_query: Query<(&FeedImage, &Children)>,
     mut image_query: Query<&mut UiImage>,
     mut images: ResMut<Assets<Image>>,
-    frame_buffer: Res<FrameBufferResource>,
+    mut frame_buffer: ResMut<FrameBufferResource>,
 ) {
     let (_flag, children) = entity_query.iter().next().unwrap();
     let child = children.iter().next().unwrap();
@@ -77,5 +77,5 @@ pub fn update_frame_buffer(
     mut frame_buffer: ResMut<FrameBufferResource>,
     mut realsense: ResMut<RealsenseResource>,
 ) {
-    frame_buffer.buffer.pull_frame(&mut realsense.realsense);
+    frame_buffer.buffer.populate_queue(&mut realsense.realsense);
 }

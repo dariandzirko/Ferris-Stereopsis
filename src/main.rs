@@ -1,4 +1,8 @@
-use bevy::{prelude::*, winit::WinitSettings};
+use bevy::{
+    diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
+    prelude::*,
+    winit::WinitSettings,
+};
 use realsense_bevy::{
     update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
     RealsenseResource,
@@ -15,6 +19,8 @@ fn main() {
         .insert_resource(RealsenseResource::new())
         .insert_resource(WinitSettings::desktop_app())
         .add_plugins(DefaultPlugins)
+        .add_plugin(LogDiagnosticsPlugin::default())
+        .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(realsense_bevy::realsense_start_system)
         .add_system(button_system)
