@@ -38,6 +38,7 @@ I would love for this project to be workable for local video recordings, other c
 
 Here is my magnum opus of screen recording
 
+![Demo](https://github.com/dariandzirko/generic_camera_feed_display/blob/main/demo/2023-04-26%2008-01-15.gif)
 
 ### Goals
 ---
