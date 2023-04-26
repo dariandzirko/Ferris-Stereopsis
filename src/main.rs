@@ -4,7 +4,7 @@ use bevy::{
     winit::WinitSettings,
 };
 use realsense_bevy::{
-    empty_system, update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
+    update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
     RealsenseResource,
 };
 
@@ -26,7 +26,6 @@ fn main() {
         .add_system(button_system)
         .add_system(update_frame_buffer)
         .add_system(update_display_system)
-        .add_system(empty_system)
         .run();
 }
 

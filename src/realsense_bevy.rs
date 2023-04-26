@@ -79,7 +79,3 @@ pub fn update_frame_buffer(
 ) {
     frame_buffer.buffer.populate_queue(&mut realsense.realsense);
 }
-
-pub fn empty_system() {
-    println!("yes");
-}
