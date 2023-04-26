@@ -16,7 +16,7 @@ I will talk to how both projects are working in tandem as I eventually ended up 
 ### Bindings
 
 
- Starting with the bottom there is the realsense .h and .so files that are supplied to the bindgen crate to generate a `bindings.rs` file that wraps all of the C functions in Rust code. It is unsafe Rust, that I then had to take care of so that is even remotely usable, and there is still a lot of unsafe code at the moment. 
+ Starting with the bottom there is the realsense .h and .so files that are supplied to the bindgen crate to generate a `bindings.rs` file that wraps all of the C functions in Rust code. It is unsafe Rust, that I then had to take care of so that it is even remotely usable, and there is still a lot of unsafe code at the moment. 
 
  ### Cleaning up 
 
