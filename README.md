@@ -4,9 +4,9 @@
 ---
 </div>
 
-The short term goal of this repo is to test and incorporate Rust powered realsense wrapping code (that I also wrote and generated -> <https://github.com/dariandzirko/realsense_wrapper>) into something that can be visualised and used by other people. It is even better that I got a non-game focused project working in Bevy showing that this game engine is more versatile than people are exploring.
+The short term goal of this repo is to test and incorporate Rust powered and somwhat safe realsense wrapper (that I also wrote and generated -> <https://github.com/dariandzirko/realsense_wrapper>) into something that can be visualised and used by other people. It is even better that I got a non-game focused project working in Bevy showing that this game engine is more versatile than people are exploring.
 
-These repos are currently a work in progress and if someone wants to use them, they will have to edit the build.rs file and include their own proper path to the necessary files, being Intel Realsense headers and shared object file. Feel free to open an issue to correct me, report a bug, or suggest changes.
+These repos are currently a work in progress and if someone wants to use them, they will have to edit the build.rs file and include their own proper path to the necessary files (being Intel Realsense headers and shared object file). Feel free to open an issue to correct me, report a bug, or suggest changes.
 
 ## How it Works 
 ---
