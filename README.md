@@ -25,7 +25,7 @@ Of course it is not all completely unsafe free but there has been a lot of progr
 
 ### Bevy-ify
 
-This part was neat but super completely intense as I had plan from playing around with Bevy before. My main ideas were copying examples for hot-loading assets and just hot-loading my images generated from the realsense data. There were other handshake I had to make, like making Resources that had the C pointers deep underneath, and a queue for the images being pulled as I didn't want the code to wait for an image to load. Also making sure that all the data pulled from the realsense was valid and if it was using the formatting data to convert the bytes to an image type I could attach to a `Handle<Image>` in Bevy. 
+This part was neat but super completely intense as I had played around with Bevy before. My main ideas were copying examples for hot-loading assets and just hot-loading my images generated from the realsense data. There were other handshake I had to make, like making Resources that had the C pointers deep underneath, and a queue for the images being pulled as I didn't want the code to wait for an image to load. Also making sure that all the data pulled from the realsense was valid and if it was using the formatting data to convert the bytes to an image type I could attach to a `Handle<Image>` in Bevy. 
 
 ## Repo Direction
 ---
