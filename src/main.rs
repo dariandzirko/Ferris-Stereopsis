@@ -1,7 +1,6 @@
 use bevy::{
     diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
     prelude::*,
-    winit::WinitSettings,
 };
 use realsense_bevy::{
     update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
