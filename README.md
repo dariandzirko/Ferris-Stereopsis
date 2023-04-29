@@ -47,3 +47,4 @@ Here is my magnum opus of screen recording
 - [ ] Write generic camera object pattern
 - [ ] Read local mp4 and display
 - [ ] Testing pipeline
+- [ ] Make it not seg fault without a realsense
