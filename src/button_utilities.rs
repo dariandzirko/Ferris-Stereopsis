@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use realsense_wrapper::{format::Rs2Format, stream::Rs2StreamKind};
 
+use crate::realsense_bevy::RestartRealsenseEvent;
+
 pub const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
 const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
 const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
@@ -12,7 +14,19 @@ const FORMAT_ARRAY: [Rs2Format; 3] = [Rs2Format::RGB8, Rs2Format::Y16, Rs2Format
 #[derive(Resource)]
 pub struct FormatSelectionResource {
     pub index: i32,
+    pub format: Rs2Format,
     pub stream: Rs2StreamKind,
+}
+
+impl FormatSelectionResource {
+    //For now I am just going to make the default RGB8 and Color
+    pub fn new() -> Self {
+        FormatSelectionResource {
+            index: 0,
+            format: Rs2Format::RGB8,
+            stream: Rs2StreamKind::Color,
+        }
+    }
 }
 
 #[derive(Component)]
@@ -50,6 +64,8 @@ pub fn button_system_cycle_format(
         (Changed<Interaction>, With<Button>),
     >,
     mut text_query: Query<&mut Text>,
+    mut current_format: ResMut<FormatSelectionResource>,
+    mut restart_realsense: EventWriter<RestartRealsenseEvent>,
 ) {
     for (_flag, interaction, mut color, children) in &mut interaction_query {
         let mut text = text_query.get_mut(children[0]).unwrap();
@@ -57,6 +73,8 @@ pub fn button_system_cycle_format(
             Interaction::Clicked => {
                 text.sections[0].value = "Format".to_string();
                 *color = PRESSED_BUTTON.into();
+                format_update(&mut current_format);
+                restart_realsense.send(RestartRealsenseEvent { does_exist: true })
             }
             Interaction::Hovered => {
                 text.sections[0].value = "Format".to_string();
@@ -70,19 +88,19 @@ pub fn button_system_cycle_format(
     }
 }
 
-//This will need a format button click event
-pub fn format_update(mut current_format: ResMut<FormatSelectionResource>) {
-    if current_format.index == FORMAT_ARRAY.len() as i32 {
+//Lazy implementation?? Should I make a setter for the resource?
+fn format_update(current_format: &mut ResMut<FormatSelectionResource>) {
+    if current_format.index == (FORMAT_ARRAY.len() - 1) as i32 {
         current_format.index = 0;
     } else {
         current_format.index += 1;
     }
-
-    current_format.stream = match_stream(current_format.index);
+    current_format.format = FORMAT_ARRAY[current_format.index as usize];
+    current_format.stream = match_stream(current_format.format);
 }
 
-fn match_stream(index: i32) -> Rs2StreamKind {
-    match FORMAT_ARRAY[index as usize] {
+fn match_stream(format: Rs2Format) -> Rs2StreamKind {
+    match format {
         Rs2Format::RGB8 => return Rs2StreamKind::Color,
         Rs2Format::Y16 => return Rs2StreamKind::Color,
         Rs2Format::Any => return Rs2StreamKind::Color,

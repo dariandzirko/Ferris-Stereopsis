@@ -1,6 +1,10 @@
-use crate::FeedImage;
+use crate::{button_utilities::FormatSelectionResource, FeedImage};
 use bevy::prelude::*;
-use realsense_wrapper::{stream::Rs2StreamKind, *};
+use realsense_wrapper::{format::Rs2Format, stream::Rs2StreamKind, *};
+
+pub struct RestartRealsenseEvent {
+    pub does_exist: bool,
+}
 
 // Make this buffer a buffer of ImageData?
 // need to call pull_frame().get_curr_frame().to_image()
@@ -39,14 +43,16 @@ impl Plugin for RealsensePlugin {
     }
 }
 
-pub fn realsense_start_system(mut realsense: ResMut<RealsenseResource>) {
+pub fn realsense_start_system(
+    mut realsense: ResMut<RealsenseResource>,
+    format: Res<FormatSelectionResource>,
+) {
     let stream_index = 0;
     let width = 640;
     let height = 480;
     let fps = 30;
-    let stream = rs2_stream_RS2_STREAM_COLOR;
-    // let stream = Rs2StreamKind::Color;
-    let format = rs2_format_RS2_FORMAT_RGB8;
+    let stream = format.stream;
+    let format = format.format;
 
     realsense
         .realsense
@@ -79,4 +85,25 @@ pub fn update_frame_buffer(
     mut realsense: ResMut<RealsenseResource>,
 ) {
     frame_buffer.buffer.populate_queue(&mut realsense.realsense);
+}
+
+pub fn restart_realsense_system(
+    mut events: EventReader<RestartRealsenseEvent>,
+    mut realsense: ResMut<RealsenseResource>,
+    format: Res<FormatSelectionResource>,
+) {
+    if !events.is_empty() {
+        let stream_index = 0;
+        let width = 640;
+        let height = 480;
+        let fps = 30;
+        let stream = format.stream;
+        let format = format.format;
+
+        realsense.realsense = RealsenseInstance::new();
+
+        realsense
+            .realsense
+            .stream_frames(stream_index, width, height, fps, stream, format);
+    }
 }

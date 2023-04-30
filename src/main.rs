@@ -2,10 +2,12 @@ use bevy::{
     diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
     prelude::*,
 };
-use button_utilities::{button_system, button_system_cycle_format, FormatButton, NORMAL_BUTTON};
+use button_utilities::{
+    button_system, button_system_cycle_format, FormatButton, FormatSelectionResource, NORMAL_BUTTON,
+};
 use realsense_bevy::{
-    update_display_system, update_frame_buffer, FrameBufferResource, RealsensePlugin,
-    RealsenseResource,
+    realsense_start_system, restart_realsense_system, update_display_system, update_frame_buffer,
+    FrameBufferResource, RealsensePlugin, RealsenseResource, RestartRealsenseEvent,
 };
 
 mod button_utilities;
@@ -16,17 +18,20 @@ pub struct FeedImage(pub bool);
 
 fn main() {
     App::new()
+        .insert_resource(FormatSelectionResource::new())
         .insert_resource(FrameBufferResource::new())
         .insert_resource(RealsenseResource::new())
+        .add_event::<RestartRealsenseEvent>()
         .add_plugins(DefaultPlugins)
         .add_plugin(LogDiagnosticsPlugin::default())
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_startup_system(setup)
-        .add_startup_system(realsense_bevy::realsense_start_system)
+        .add_startup_system(realsense_start_system)
         .add_system(button_system)
         .add_system(button_system_cycle_format)
         .add_system(update_frame_buffer)
         .add_system(update_display_system)
+        .add_system(restart_realsense_system)
         .run();
 }
 
