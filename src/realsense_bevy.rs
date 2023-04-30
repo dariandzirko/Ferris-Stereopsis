@@ -1,6 +1,6 @@
 use crate::FeedImage;
 use bevy::prelude::*;
-use realsense_wrapper::*;
+use realsense_wrapper::{stream::Rs2StreamKind, *};
 
 // Make this buffer a buffer of ImageData?
 // need to call pull_frame().get_curr_frame().to_image()
@@ -45,6 +45,7 @@ pub fn realsense_start_system(mut realsense: ResMut<RealsenseResource>) {
     let height = 480;
     let fps = 30;
     let stream = rs2_stream_RS2_STREAM_COLOR;
+    // let stream = Rs2StreamKind::Color;
     let format = rs2_format_RS2_FORMAT_RGB8;
 
     realsense
