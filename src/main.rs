@@ -7,7 +7,7 @@ use button_utilities::{
 };
 use realsense_bevy::{
     realsense_start_system, restart_realsense_system, update_display_system, update_frame_buffer,
-    FrameBufferResource, RealsensePlugin, RealsenseResource, RestartRealsenseEvent,
+    FrameBufferResource, RealsenseResource, RestartRealsenseEvent,
 };
 
 mod button_utilities;
@@ -18,13 +18,13 @@ pub struct FeedImage(pub bool);
 
 fn main() {
     App::new()
-        .insert_resource(FormatSelectionResource::new())
+        .insert_resource(FormatSelectionResource::new(1))
         .insert_resource(FrameBufferResource::new())
         .insert_resource(RealsenseResource::new())
         .add_event::<RestartRealsenseEvent>()
         .add_plugins(DefaultPlugins)
-        .add_plugin(LogDiagnosticsPlugin::default())
-        .add_plugin(FrameTimeDiagnosticsPlugin::default())
+        //.add_plugin(LogDiagnosticsPlugin::default())
+        //.add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(realsense_start_system)
         .add_system(button_system)

@@ -57,6 +57,11 @@ pub fn realsense_start_system(
     realsense
         .realsense
         .stream_frames(stream_index, width, height, fps, stream, format);
+
+    println!(
+        "realsense_start_system format: {:?}, stream: {:?}",
+        format, stream
+    );
 }
 
 pub fn update_display_system(
@@ -65,6 +70,7 @@ pub fn update_display_system(
     mut images: ResMut<Assets<Image>>,
     mut frame_buffer: ResMut<FrameBufferResource>,
 ) {
+    //These unwraps are gna be the bane of me
     let (_flag, children) = entity_query.iter().next().unwrap();
     let child = children.iter().next().unwrap();
     let mut image = image_query.get_mut(*child).unwrap();
@@ -88,7 +94,7 @@ pub fn update_frame_buffer(
 }
 
 pub fn restart_realsense_system(
-    mut events: EventReader<RestartRealsenseEvent>,
+    events: EventReader<RestartRealsenseEvent>,
     mut realsense: ResMut<RealsenseResource>,
     format: Res<FormatSelectionResource>,
 ) {
@@ -101,7 +107,6 @@ pub fn restart_realsense_system(
         let format = format.format;
 
         realsense.realsense = RealsenseInstance::new();
-
         realsense
             .realsense
             .stream_frames(stream_index, width, height, fps, stream, format);

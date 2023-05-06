@@ -13,18 +13,18 @@ const FORMAT_ARRAY: [Rs2Format; 3] = [Rs2Format::RGB8, Rs2Format::Y16, Rs2Format
 //I might even need some format struct wrapper for this task
 #[derive(Resource)]
 pub struct FormatSelectionResource {
-    pub index: i32,
+    pub index: usize,
     pub format: Rs2Format,
     pub stream: Rs2StreamKind,
 }
 
 impl FormatSelectionResource {
     //For now I am just going to make the default RGB8 and Color
-    pub fn new() -> Self {
+    pub fn new(index: usize) -> Self {
         FormatSelectionResource {
-            index: 0,
-            format: Rs2Format::RGB8,
-            stream: Rs2StreamKind::Color,
+            index: index,
+            format: FORMAT_ARRAY[index],
+            stream: match_stream(FORMAT_ARRAY[index]),
         }
     }
 }
@@ -90,20 +90,23 @@ pub fn button_system_cycle_format(
 
 //Lazy implementation?? Should I make a setter for the resource?
 fn format_update(current_format: &mut ResMut<FormatSelectionResource>) {
-    if current_format.index == (FORMAT_ARRAY.len() - 1) as i32 {
+    if current_format.index == (FORMAT_ARRAY.len() - 1) {
         current_format.index = 0;
     } else {
         current_format.index += 1;
     }
-    current_format.format = FORMAT_ARRAY[current_format.index as usize];
+    current_format.format = FORMAT_ARRAY[current_format.index];
     current_format.stream = match_stream(current_format.format);
+
+    println!("format: {:?}", current_format.format);
+    println!("stream: {:?}", current_format.stream);
 }
 
 fn match_stream(format: Rs2Format) -> Rs2StreamKind {
     match format {
         Rs2Format::RGB8 => return Rs2StreamKind::Color,
         Rs2Format::Y16 => return Rs2StreamKind::Color,
-        Rs2Format::Any => return Rs2StreamKind::Color,
+        Rs2Format::Z16 => return Rs2StreamKind::Depth,
         _ => Rs2StreamKind::Any,
     }
 }
