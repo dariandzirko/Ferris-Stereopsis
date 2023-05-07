@@ -18,7 +18,7 @@ pub struct FeedImage(pub bool);
 
 fn main() {
     App::new()
-        .insert_resource(FormatSelectionResource::new(1))
+        .insert_resource(FormatSelectionResource::new(2))
         .insert_resource(FrameBufferResource::new())
         .insert_resource(RealsenseResource::new())
         .add_event::<RestartRealsenseEvent>()

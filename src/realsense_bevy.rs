@@ -106,6 +106,10 @@ pub fn restart_realsense_system(
         let stream = format.stream;
         let format = format.format;
 
+        println!(
+            "restart_realsense_system format: {:?}, stream: {:?}",
+            format, stream
+        );
         realsense.realsense = RealsenseInstance::new();
         realsense
             .realsense
