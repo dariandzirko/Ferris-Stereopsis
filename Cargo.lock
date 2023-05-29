@@ -2747,7 +2747,7 @@ dependencies = [
 [[package]]
 name = "realsense_wrapper"
 version = "0.1.0"
-source = "git+https://github.com/dariandzirko/realsense_wrapper#e2d05a0b22870069b6fbf72e098c1cb4937c0ff2"
+source = "git+https://github.com/dariandzirko/realsense_wrapper#ba33a5e077d2700d793a20c069e6cf02218034ae"
 dependencies = [
  "bindgen 0.63.0",
  "image",
