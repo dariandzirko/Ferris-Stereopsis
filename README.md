@@ -36,7 +36,7 @@ I would love for this project to be workable for local video recordings, other c
 
 Here is my magnum opus of screen recording
 
-![Demo](https://github.com/dariandzirko/generic_camera_feed_display/blob/main/demo/30fps_realsense.gif)
+![Demo](https://github.com/dariandzirko/generic_camera_feed_display/blob/main/demo/30fps_slim_realsense.gif)
 
 ### Goals
 ---
