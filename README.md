@@ -1,6 +1,6 @@
 <div align="center">
 
-# generic_camera_feed_display
+# Ferris-Stereopsis
 ---
 </div>
 
