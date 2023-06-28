@@ -43,7 +43,8 @@ Here is my magnum opus of screen recording
 
 - [x] Get stable fps on video feed
 - [X] Increase fps closer to realsense spec of 30
-- [ ] Remove most unsafe code
+- [X] Remove most unsafe code
+- [ ] Fix depth data to be pretty
 - [ ] Write generic camera object pattern
 - [ ] Read local mp4 and display
 - [ ] Testing pipeline
